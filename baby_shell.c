@@ -3,6 +3,11 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
+#define UNUSED(x) (void)(x)
+#define DELIM "\n \t"
+
+/* #include "holberton.h" */
 
 /**
  * main - super simple shell
@@ -21,9 +26,9 @@ int main(void)
 	do {
 		printf("($) ");
 		linelen = getline(&linebuf, &linesize, stdin);
-		my_argv[0] = linebuf;
+		my_argv[0] = strtok(linebuf, DELIM);
 		my_argv[1] = NULL;
-		printf("linebuf = %s", linebuf);
+		/* printf("linebuf = %s", linebuf); */
 		if (linelen > 0)
 		{
 			switch (pid = fork())
@@ -31,7 +36,6 @@ int main(void)
 				case -1:
 					perror("fork()");
 				case 0: /* child */
-					printf("child- %s\n", my_argv[0]);
 					status = execve(my_argv[0], my_argv, NULL);
 					exit(status);
 				default: /* parent */
@@ -39,10 +43,11 @@ int main(void)
 					{
 						perror("waitpid()");
 						exit(EXIT_FAILURE);
-					} /*
+					}
+					/*
 					if (WIFEXITED(status))
 					{
-						printf("WIFEXITED, status = %d", status);
+						printf("WIFEXITED, status = %d\n", status);
 						exit(WEXITSTATUS(status));
 					}
 					exit(EXIT_FAILURE);
@@ -52,8 +57,8 @@ int main(void)
 		else
 			printf("\n");
 	} while (linelen > 0);
-
-	printf("linelen = %l\n", linelen);
+	/* TODO: wtf is up with linelen = 18446744073709551615 ??? */
+	printf("linelen = %lu\n", linelen);
 	free(linebuf);
 	linebuf = NULL;
 	if (linelen == -1)
