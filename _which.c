@@ -11,18 +11,33 @@ char *get_path(char **envp)
 
 	while (envp[i])
 	{
-		if (_strcmp(envp[i], "PATH=") >= 4)
+		/* printf("envp[%d] = %s", i, envp[i]); */
+		if (str_eval(envp[i], "PATH=") >= 4)
+		{
 			return (envp[i]);
+		}
+		i++;
 	}
 	return (NULL);
 }
 
 /**
- * walk_path - return directories from PATH, sequentially
+ * get_EV - get specified environment variable from envp
  *
- * Return: string containing a directory from the path
- * NOTE: This uses strtok.  only walk a copy of your envp!
+ *
  **/
+char *get_EV(char *var, char **envp)
+{
+	int i = 0;
+
+	while (envp[i])
+	{
+		if (str_eval(envp[i], var) >= _strlen(var))
+			return (_strdup(envp[i]));
+		i++;
+	}
+	return (NULL);
+}
 
 /**
  * _which - stat example
@@ -37,17 +52,17 @@ int main(int ac, char **av, char **envp)
 	char *path, *path2, *tmp;
 
 	path = get_path(envp);
-	path2 = _strdup(path); /* make sure this works */
-	path = _strdup(path2); /* this is copy to trash while finding # of tokens */
+	path2 = _strdup(path);
+
 	/* determine # of pointers to malloc */
 	tmp = strtok(path2, "=");
-	printf("first tmp -> %s", tmp);
+	printf("first tmp -> %s\n", tmp);
 	for (i = 0; tmp; i++)
 	{
 		tmp = strtok(NULL, ":");
-		printf("%d--> %s\n", i, tmp);
+		printf("i = %d--> tmp = %s\n", i, tmp);
 	}
-	printf("final --> i = %d", i);
+	printf("final --> i = %d\n", i);
     i = 1;
 	/*
     while (av[i])

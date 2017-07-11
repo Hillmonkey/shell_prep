@@ -26,13 +26,13 @@ int _strcmp(char *s1, char *s2)
 
 }
 /**
- *_strcmp2 - function that compares two strings.
+ *str_eval - function that compares two strings.
  *@s1:argument
  *@s2:arguments
  *Return: *** position where first diff is found in the 2 strings
 */
 
-int _strcmp2(char *s1, char *s2)
+int str_eval(char *s1, char *s2)
 {
 	int a = 0;
 	int b = 0;
@@ -41,7 +41,6 @@ int _strcmp2(char *s1, char *s2)
 	{
 		a++;
 	}
-	printf("_strcmp2 returns: %d\n", a);
 	return (a);
 	/*
 	if (s1[a] != s2[a])
