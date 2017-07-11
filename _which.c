@@ -40,44 +40,52 @@ char *get_EV(char *var, char **envp)
 }
 
 /**
- * _which - stat example
- * NOTE: TODO: This is a main function, should be shifted to a separate function
- * 		eventually ...
- * Return: Always 0.
+ * main - implements which - locate a command
+ * @ac: number of command line arguments passed in
+ * @av: all command line arguments as strings
+ * @envp: all environment variables
+ * Return: Always 0
+ * Note: this does not implement the -a flag which would 
+ *       list all instances on the whole path
  */
 int main(int ac, char **av, char **envp)
 {
-    unsigned int i, len;
+    unsigned int i, j;
     struct stat st;
-	char *path, *path2, *tmp;
+	char *path, *path2, *full_path, *tmp;
+	char *buf[1024];
 
+	UNUSED(ac);
 	path = get_path(envp);
 	path2 = _strdup(path);
 
-	/* determine # of pointers to malloc */
+	/* point into tokenized path string */
 	tmp = strtok(path2, "=");
-	printf("first tmp -> %s\n", tmp);
+	/* printf("first tmp -> %s\n", tmp); */
 	for (i = 0; tmp; i++)
 	{
-		tmp = strtok(NULL, ":");
-		printf("i = %d--> tmp = %s\n", i, tmp);
+		buf[i] = tmp = strtok(NULL, ":");
+		/* printf("i = %d--> tmp = %s\n", i, buf[i]); */
 	}
-	printf("final --> i = %d\n", i);
+	free(tmp);
+
     i = 1;
-	/*
     while (av[i])
     {
-        printf("%s:", av[i]);
-        if (stat(av[i], &st) == 0)
-        {
-            printf(" FOUND\n");
-        }
-        else
-        {
-            printf(" NOT FOUND\n");
-        }
-        i++;
-    }
-	*/
+		j = 0;
+		while (buf[j])
+		{
+			full_path = str_concat(str_concat(buf[j], "/"), av[i]);
+			/* printf("%s\n", full_path); */
+			if (stat(full_path, &st) == 0)
+			{
+				printf("%s\n", full_path);
+				return (0);
+			}
+			free(full_path);
+			j++;
+		}
+		i++;
+	}
 	return (0);
 }
