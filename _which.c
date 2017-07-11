@@ -34,7 +34,10 @@ char *get_EV(char *var, char **envp)
 	while (envp[i])
 	{
 		if (str_eval(envp[i], var) >= _strlen(var))
+		{
+			printf("getEV-> %s\n", envp[i]);
 			return (_strdup(envp[i]));
+		}
 		i++;
 	}
 	return (NULL);
@@ -53,39 +56,43 @@ int main(int ac, char **av, char **envp)
 {
 	unsigned int i, j;
 	struct stat st;
-	char *path, *path2, *full_path, *tmp;
-	char *buf[1024];
+	char *path, *full_path, *tmp, *path_slash;
+	char *buf[BUFSIZE];
 
 	UNUSED(ac);
-	path = get_path(envp);
-	path2 = _strdup(path);
+	init_Cptr_buffer(buf, BUFSIZE);
+	path = get_EV("PATH", envp);
+	/* printf ("path: %p\n", path); */
+	/* printf ("path: %s\n", path); */
 	/* buf pointers point into tokenized path string */
-	tmp = strtok(path2, "=");
+	tmp = strtok(path, "=");
 	/* printf("first tmp -> %s\n", tmp); */
 	for (i = 0; tmp; i++)
 	{
 		buf[i] = tmp = strtok(NULL, ":");
 		/* printf("i = %d--> tmp = %s\n", i, buf[i]); */
 	}
-	free(tmp);
+	/* free(tmp); */
 	i = 1;
 	while (av[i])
 	{
 		j = 0;
 		while (buf[j])
 		{
-			full_path = str_concat(str_concat(buf[j], "/"), av[i]);
+			path_slash = str_concat(buf[j], "/");
+			full_path = str_concat(path_slash, av[i]);
+			free(path_slash);
 			if (stat(full_path, &st) == 0)
 			{
 				printf("%s\n", full_path);
-				break;
+				/* break; */
 			}
 			free(full_path);
 			j++;
 		}
+		/* free(full_path); */
 		i++;
 	}
 	free(path);
-	free(path2);
 	return (0);
 }
