@@ -20,7 +20,7 @@ char *_strdup(char *str)
 	for (i = 0; str[i] != '\0'; i++)
 		new[i] = str[i];
 
-	new[size] = '\0';
+	new[size - 1] = '\0';
 	return (new);
 }
 
@@ -52,4 +52,36 @@ char *str_concat(char *s1, char *s2)
 		new[len1 + i] = s2[i];
 	new[newlen] = '\0';
 	return (new);
+}
+
+/**
+ * init_char_buffer - wipe all contents of buffer to default value
+ * @buffer: buffer to be initialized
+ * @bufsize: size of buffer to be wiped/initialized
+ * Return: EXIT_SUCCESS
+ **/
+int init_char_buffer(char *buffer, int bufsize)
+{
+	int i;
+	const char default_char = '\0';
+
+	for (i = 0; i < bufsize; i++)
+		buffer[i] = default_char;
+	return (EXIT_SUCCESS);
+}
+
+/**
+ * init_Cptr_buffer - wipe all contents of buffer to default value
+ * @buffer: buffer to be initialized
+ * @bufsize: size of buffer to be wiped/initialized
+ * Return: EXIT_SUCCESS
+ **/
+int init_Cptr_buffer(char **buffer, int bufsize)
+{
+	int i;
+	char *default_value = NULL;
+
+	for (i = 0; i < bufsize; i++)
+		buffer[i] = default_value;
+	return (EXIT_SUCCESS);
 }
