@@ -2,7 +2,7 @@
 
 /**
  * get_path - return PATH
- * @envp - full environment - array of strings
+ * @envp: full environment - array of strings
  * Return: PATH variable or NULL if not found
  **/
 char *get_path(char **envp)
@@ -22,9 +22,10 @@ char *get_path(char **envp)
 }
 
 /**
- * get_EV - get specified environment variable from envp
- *
- *
+ * get_EV - get specified Environ Variable from envp
+ * @var: variable name to search for in Environment Variables
+ * @envp: full environment - array of strings
+ * Return: pointer into Environ, or NULL if no match
  **/
 char *get_EV(char *var, char **envp)
 {
@@ -45,21 +46,20 @@ char *get_EV(char *var, char **envp)
  * @av: all command line arguments as strings
  * @envp: all environment variables
  * Return: Always 0
- * Note: this does not implement the -a flag which would 
+ * Note: this does not implement the -a flag which would
  *       list all instances on the whole path
  */
 int main(int ac, char **av, char **envp)
 {
-    unsigned int i, j;
-    struct stat st;
+	unsigned int i, j;
+	struct stat st;
 	char *path, *path2, *full_path, *tmp;
 	char *buf[1024];
 
 	UNUSED(ac);
 	path = get_path(envp);
 	path2 = _strdup(path);
-
-	/* point into tokenized path string */
+	/* buf pointers point into tokenized path string */
 	tmp = strtok(path2, "=");
 	/* printf("first tmp -> %s\n", tmp); */
 	for (i = 0; tmp; i++)
@@ -68,24 +68,24 @@ int main(int ac, char **av, char **envp)
 		/* printf("i = %d--> tmp = %s\n", i, buf[i]); */
 	}
 	free(tmp);
-
-    i = 1;
-    while (av[i])
-    {
+	i = 1;
+	while (av[i])
+	{
 		j = 0;
 		while (buf[j])
 		{
 			full_path = str_concat(str_concat(buf[j], "/"), av[i]);
-			/* printf("%s\n", full_path); */
 			if (stat(full_path, &st) == 0)
 			{
 				printf("%s\n", full_path);
-				return (0);
+				break;
 			}
 			free(full_path);
 			j++;
 		}
 		i++;
 	}
+	free(path);
+	free(path2);
 	return (0);
 }
