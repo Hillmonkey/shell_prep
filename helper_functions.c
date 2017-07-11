@@ -35,21 +35,10 @@ int _strcmp(char *s1, char *s2)
 int str_eval(char *s1, char *s2)
 {
 	int a = 0;
-	int b = 0;
 
 	while (s1[a] != '\0' && s2[a] != '\0' && s1[a] == s2[a])
-	{
 		a++;
-	}
 	return (a);
-	/*
-	if (s1[a] != s2[a])
-	{
-		b = s1[a] - s2[a];
-		return (a);
-	}
-	return (0);
-	*/
 }
 /**
  **_strcpy - function returns copy of a string.
@@ -74,7 +63,7 @@ char *_strcpy(char *dest, char *src)
 int _strlen(char *s)
 {
 	int i;
-	
+
 	for (i = 0; *s != '\0'; i++)
 	{
 		++s;
